@@ -1,0 +1,145 @@
+#Employee management sys that i've created 
+
+import logging
+import json
+filename = "employee.json"
+l1 = []
+
+logging.basicConfig(filename="information.txt", level=logging.INFO , format=" %(asctime)s : %(name)s , %(message)s " )
+
+def option ():
+  print("\n              ...     EMPLOYEE MANAGEMENT SYSTEM    ...         ")
+  print("\n")
+  print("1.view data ")
+  print("2.add data ")
+  print("3.replace data ")
+  print("4.remove data")
+  print("5.Exit ")
+
+
+def add(l1):
+  try:
+    with open(filename , mode="r") as reading :
+      employees= {}
+      employees["Name"]= input("enter the name of employee :: ")
+      employees["ID"]= int(input("enter the  employee ID ::"))
+      employees["Salary"]= int(input("enter the salary of employee::"))
+      employees["Date_of_joining"]= input("enter the joined date of employee(YY-MM-DD)::")
+      print("\n")
+      l1.append(employees)
+
+    with open (filename , mode="w")as writer :
+      json.dump(l1 , writer , indent=4)
+      logging.info( " addded new data !!!" )
+
+  except ValueError as e :
+    print(f"Error:{e}")
+  except FileNotFoundError:     
+    print("Error: File not found. Ensure that 'haha.json' exists.")
+  except json.JSONDecodeError:
+    print("Error: Failed to decode JSON. Ensure the file contains valid JSON data.")
+  except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+
+
+def view():
+  try:
+    with open (filename , mode="r") as reader :
+      read = json.load(reader)
+      for data in read :
+        name =  data["Name"]
+        id = data["ID"]
+        salary =data["Salary"]
+        date = data["Date_of_joining"]
+        print("\n")
+        print(f" the name of employee :{name} ")
+        print(f" the employee ID :{id} ")
+        print(f" the name of employee :RS.{salary}")
+        print(f" the name of employee :{date}")
+        logging.info("file viewed !!")
+
+  except UnboundLocalError as e :
+    print(f"Error:{e} / Your Database Is Empty .")
+  except FileNotFoundError:
+        print("Error: File not found. Ensure that 'haha.json' exists.")
+  except json.JSONDecodeError:
+        print("Error: Failed to decode JSON. Ensure the file contains valid JSON data.")
+  except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+
+def replace():
+    view()
+    try:
+      with open (filename , mode="r") as read :
+        data = json.load(read)
+        RE_id = int(input("enter the Employee id that you want to replace :"))
+        for  employees in data:
+          if employees["ID"] == RE_id :
+            employees["Name"]= input("enter the name of employee :: ")
+            employees["ID"]= RE_id
+            employees["Salary"]= int(input("enter the salary of employee::"))
+            employees["Date_of_joining"]= input( "enter the joined date of employee(YY-MM-DD)::")
+
+
+        with open (filename , mode="w")as writer :
+          data = json.dump( data , writer , indent=4)
+          logging.info("file replaced ")
+
+    except KeyError  :
+      print("unable to find the key! ") 
+    except FileNotFoundError:
+        print("Error: File not found. Ensure that 'haha.json' exists.")
+    except json.JSONDecodeError:
+        print("Error: Failed to decode JSON. Ensure the file contains valid JSON data.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")   
+
+def remove():
+    view()
+    try: 
+        with open(filename, mode="r") as reader:
+            read = json.load(reader)
+        removable_id = input("Enter the ID of the person to remove: ")
+        updated_data = [person for person in read if person["ID"] != removable_id]
+  
+        if len(updated_data) == len(read):
+            print("No person found with the given ID.")
+
+        else:
+            with open(filename, mode="w") as writer:
+                json.dump(updated_data, writer, indent=4)
+                print("Person removed successfully.")
+                logging.info("data removed ")
+
+    except FileNotFoundError:
+        print("Error: File not found. Ensure that 'haha.json' exists.")
+    except json.JSONDecodeError:
+        print("Error: Failed to decode JSON. Ensure the file contains valid JSON data.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+def main ():
+  while True :
+    option()
+    choice = input("enter your choice :: ")
+    logging.info("Code Used")
+    if choice=="1":
+      print("    ....Employees...  ")
+      view()
+    elif choice =="2":
+      add(l1)
+    elif choice=="3":
+      replace()
+    elif choice=="4":
+      remove()
+    elif choice =="5":
+       print("thank You for using my code")
+       logging.info("file exitted !! ")
+    else:
+      print("please enter the valid choice")
+
+if __name__ == "__main__":
+   main()
+
+
