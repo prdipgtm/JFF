@@ -12,8 +12,7 @@ class countdown :
   def run(self):
     while self.count > 0 and self.count >= self.end:
       if self.count < self.end:
-        return F"countdown is finished! {self.count}"
-        
+        return F"countdown is finished! {self.count}"        
       print(self.count)
       self.count -= 1
       time.sleep(self.lapse)
